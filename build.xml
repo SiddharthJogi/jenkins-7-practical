@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project name="SampleJavaProject" default="compile" basedir=".">
+
+    <!-- Set global properties -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="main-class" value="com.example.Main"/>
+
+    <!-- Clean the build directory -->
+    <target name="clean">
+        <echo message="Cleaning the build directory..."/>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- Compile Java source files -->
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <echo message="Compiling Java source files..."/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" />
+    </target>
+
+    <!-- Run JUnit tests -->
+    <target name="test" depends="compile">
+        <echo message="Running JUnit tests..."/>
+        <mkdir dir="${build.dir}/test-reports"/>
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath>
+                <path location="${classes.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <formatter type="xml"/>
+            <batchtest fork="true" todir="${build.dir}/test-reports">
+                <fileset dir="${src.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <!-- Package compiled files into a JAR -->
+    <target name="jar" depends="test">
+        <mkdir dir="${jar.dir}"/>
+        <echo message="Packaging into JAR file..."/>
+        <jar destfile="${jar.dir}/SampleProject.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Main target to build everything -->
+    <target name="build" depends="jar">
+        <echo message="Build complete."/>
+    </target>
+
+</project>
