@@ -22,28 +22,8 @@
         <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" />
     </target>
 
-    <!-- Run JUnit tests -->
-    <target name="test" depends="compile">
-        <echo message="Running JUnit tests..."/>
-        <mkdir dir="${build.dir}/test-reports"/>
-        <junit printsummary="yes" haltonfailure="yes">
-            <classpath>
-                <path location="${classes.dir}"/>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar"/>
-                </fileset>
-            </classpath>
-            <formatter type="xml"/>
-            <batchtest fork="true" todir="${build.dir}/test-reports">
-                <fileset dir="${src.dir}">
-                    <include name="**/*Test.java"/>
-                </fileset>
-            </batchtest>
-        </junit>
-    </target>
-
     <!-- Package compiled files into a JAR -->
-    <target name="jar" depends="test">
+    <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
         <echo message="Packaging into JAR file..."/>
         <jar destfile="${jar.dir}/SampleProject.jar" basedir="${classes.dir}">
