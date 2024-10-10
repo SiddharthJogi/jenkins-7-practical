@@ -1,41 +1,31 @@
-<?xml version="1.0"?>
-<project name="SampleJavaProject" default="compile" basedir=".">
+<project name="SimpleProject" default="compile" basedir=".">
 
-    <!-- Set global properties -->
+    <!-- Define the directory structure -->
     <property name="src.dir" value="src"/>
     <property name="build.dir" value="build"/>
-    <property name="lib.dir" value="lib"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir" value="${build.dir}/jar"/>
-    <property name="main-class" value="com.example.Main"/>
-
-    <!-- Clean the build directory -->
-    <target name="clean">
-        <echo message="Cleaning the build directory..."/>
-        <delete dir="${build.dir}"/>
+    
+    <!-- Create build directory if not exists -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
     </target>
 
-    <!-- Compile Java source files -->
-    <target name="compile" depends="clean">
-        <mkdir dir="${classes.dir}"/>
-        <echo message="Compiling Java source files..."/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" />
+    <!-- Compile the helloworld.java file -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <include name="helloworld.java"/>
+        </javac>
     </target>
 
-    <!-- Package compiled files into a JAR -->
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <echo message="Packaging into JAR file..."/>
-        <jar destfile="${jar.dir}/SampleProject.jar" basedir="${classes.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
-            </manifest>
-        </jar>
+    <!-- Run the compiled Java program -->
+    <target name="run-java" depends="compile">
+        <java classname="helloworld" fork="true">
+            <classpath path="${build.dir}"/>
+        </java>
     </target>
 
-    <!-- Main target to build everything -->
-    <target name="build" depends="jar">
-        <echo message="Build complete."/>
+    <!-- Build and Run -->
+    <target name="build-and-run" depends="run-java">
+        <echo message="helloworld.java executed successfully."/>
     </target>
 
 </project>
