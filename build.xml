@@ -1,31 +1,16 @@
-<project name="SimpleProject" default="compile" basedir=".">
+<project name="SimpleJavaApp" default="run">
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
 
-    <!-- Define the directory structure -->
-    <property name="src.dir" value="src"/>
-    <property name="build.dir" value="build"/>
-    
-    <!-- Create build directory if not exists -->
     <target name="init">
-        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build}"/>
     </target>
 
-    <!-- Compile the helloworld.java file -->
     <target name="compile" depends="init">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
-            <include name="helloworld.java"/>
-        </javac>
+        <javac srcdir="${src}" destdir="${build}"/>
     </target>
 
-    <!-- Run the compiled Java program -->
-    <target name="run-java" depends="compile">
-        <java classname="helloworld" fork="true">
-            <classpath path="${build.dir}"/>
-        </java>
+    <target name="run" depends="compile">
+        <java classname="Main" classpath="${build}"/>
     </target>
-
-    <!-- Build and Run -->
-    <target name="build-and-run" depends="run-java">
-        <echo message="helloworld.java executed successfully."/>
-    </target>
-
 </project>
